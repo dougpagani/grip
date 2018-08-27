@@ -1,5 +1,7 @@
 from __future__ import print_function, unicode_literals
 
+import signal
+import traceback
 import base64
 import json
 import mimetypes
@@ -244,6 +246,9 @@ class Grip(Flask):
                     try:
                         text = self.reader.read(subpath)
                     except ReadmeNotFoundError:
+                        print('ERROR: File was deleted')
+                        print('EXITING: %s' % os.getpid())
+                        os.kill(os.getpid(), signal.SIGINT)
                         return
                     # Render the Readme content
                     try:
